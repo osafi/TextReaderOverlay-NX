@@ -37,7 +37,7 @@ tsl::elm::Element* FavoritesMenu::createUI() {
         return frame;
     }
 
-    auto list = new tsl::elm::List(7);
+    auto list = new tsl::elm::List();
 
     for (auto it = m_entries.begin(); it != m_entries.end(); ++it) {
         auto item = new tsl::elm::ListItem((*it)->label());

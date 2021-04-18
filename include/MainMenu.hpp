@@ -7,7 +7,7 @@ public:
     MainMenu() : m_debug(false) {}
 
     tsl::elm::Element* createUI() override;
-    bool handleInput(u64 keysDown, u64 keysHeld, touchPosition touchInput, JoystickPosition leftJoyStick, JoystickPosition rightJoyStick) override;
+    bool handleInput(u64 keysDown, u64 keysHeld, const HidTouchState &touchInput, HidAnalogStickState leftJoyStick, HidAnalogStickState rightJoyStick) override;
 
 private:
     tsl::elm::List* m_menuItems;

@@ -45,7 +45,7 @@ tsl::elm::Element* MainMenu::createUI() {
     return frame;
 }
 
-bool MainMenu::handleInput(u64 keysDown, u64 keysHeld, touchPosition touchInput, JoystickPosition leftJoyStick, JoystickPosition rightJoyStick) {
+bool MainMenu::handleInput(u64 keysDown, u64 keysHeld, const HidTouchState &touchInput, HidAnalogStickState leftJoyStick, HidAnalogStickState rightJoyStick) {
     if (!m_debug && (keysDown & KEY_MINUS)) {
         auto logMenu = new tsl::elm::ListItem("Show Logs");
         logMenu->setClickListener([](s64 keys) {

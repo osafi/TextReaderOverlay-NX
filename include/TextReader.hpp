@@ -35,7 +35,7 @@ public:
     ~TextReader();
 
     tsl::elm::Element* createUI() override;
-    bool handleInput(u64 keysDown, u64 keysHeld, touchPosition touchInput, JoystickPosition leftJoyStick, JoystickPosition rightJoyStick) override;
+    bool handleInput(u64 keysDown, u64 keysHeld, const HidTouchState &touchInput, HidAnalogStickState leftJoyStick, HidAnalogStickState rightJoyStick) override;
 
     void scrollTo(u32 line);
     void scroll(s32 offset);

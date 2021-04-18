@@ -54,7 +54,7 @@ tsl::elm::Element* FileSelect::createUI() {
         renderer->drawString(m_path.c_str(), false, 20, 80, 12, a(0xFFFF));
     }));
 
-    auto list = new tsl::elm::List(7);
+    auto list = new tsl::elm::List();
 
     for (auto it = m_entries.begin(); it != m_entries.end(); ++it) {
         auto item = new tsl::elm::ListItem((*it)->label());

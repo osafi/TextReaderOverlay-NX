@@ -143,7 +143,7 @@ void TextReader::printLn(std::string const &text, s32 x, s32 y, u32 fontSize, ts
     });
 }
 
-bool TextReader::handleInput(u64 keysDown, u64 keysHeld, touchPosition touchInput, JoystickPosition leftJoyStick, JoystickPosition rightJoyStick) {
+bool TextReader::handleInput(u64 keysDown, u64 keysHeld, const HidTouchState &touchInput, HidAnalogStickState leftJoyStick, HidAnalogStickState rightJoyStick) {
     if (keysHeld & KEY_ZR) {
         if (keysHeld & KEY_LSTICK_UP)
             scrollTo(0);
