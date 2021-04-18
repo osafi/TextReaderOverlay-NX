@@ -18,10 +18,3 @@ private:
     std::vector<FileSelectEntry*> m_entries;
     bool m_failed;
 };
-
-class FileSelectFrame : public tsl::elm::OverlayFrame {
-public:
-    FileSelectFrame() : OverlayFrame("", "") {}
-
-    void draw(tsl::gfx::Renderer *renderer) override;
-};

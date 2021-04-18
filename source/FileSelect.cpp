@@ -2,8 +2,8 @@
 
 #include <filesystem>
 
+#include <CustomFooterOverlayFrame.hpp>
 #include <FileSelectEntry.hpp>
-#include <CompositeElement.hpp>
 #include <Config.hpp>
 #include <Utils.hpp>
 
@@ -46,13 +46,7 @@ FileSelect::~FileSelect() {
 }
 
 tsl::elm::Element* FileSelect::createUI() {
-    auto frame = new FileSelectFrame();
-
-    auto composite = new CompositeElement();
-
-    composite->addElement(new tsl::elm::CustomDrawer([this](tsl::gfx::Renderer* renderer, u16 x, u16 y, u16 w, u16 h) {
-        renderer->drawString(m_path.c_str(), false, 20, 80, 12, a(0xFFFF));
-    }));
+    auto frame = new CustomFooterOverlayFrame("Select File...", m_path, "\uE0E3  Favorite");
 
     auto list = new tsl::elm::List();
 
@@ -73,19 +67,7 @@ tsl::elm::Element* FileSelect::createUI() {
         list->addItem(item);
     }
 
-    composite->addElement(list, 40, 110, tsl::cfg::FramebufferWidth - 80);
-
-    frame->setContent(composite);
+    frame->setContent(list);
 
     return frame;
-}
-
-void FileSelectFrame::draw(tsl::gfx::Renderer *renderer) {
-    renderer->fillScreen(a({ 0x0, 0x0, 0x0, 0xD }));
-    renderer->drawString("Select File...", false, 20, 50, 30, a(0xFFFF));
-    renderer->drawRect(15, 720 - 73, tsl::cfg::FramebufferWidth - 30, 1, a(0xFFFF));
-    renderer->drawString("\uE0E3  Favorite", false, 30, 693, 23, a(0xFFFF));
-
-    if (this->m_contentElement != nullptr)
-        this->m_contentElement->frame(renderer);
 }
