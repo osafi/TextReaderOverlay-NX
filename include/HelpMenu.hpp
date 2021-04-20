@@ -7,5 +7,5 @@ public:
     tsl::elm::Element* createUI() override;
 
 private:
-    static inline void showKeybind(tsl::gfx::Renderer *renderer, u32 offset, u32 i, const char* keys, const char* desc);
+    static inline void showKeybind(tsl::gfx::Renderer *renderer, u32 xOffset, u32 yOffset, u32 i, const char* keys, const char* desc);
 };

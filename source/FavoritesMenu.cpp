@@ -57,7 +57,6 @@ tsl::elm::Element* FavoritesMenu::createUI() {
         list->addItem(item);
     }
 
-    list->setBoundaries(40, 110, 0, 0);
     frame->setContent(list);
 
     return frame;
