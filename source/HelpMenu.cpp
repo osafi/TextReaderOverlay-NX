@@ -1,7 +1,9 @@
 #include <HelpMenu.hpp>
 
+#include <StandardOverlayFrame.hpp>
+
 tsl::elm::Element* HelpMenu::createUI() {
-    auto *frame = new tsl::elm::OverlayFrame("Controls", "");
+    auto *frame = new StandardOverlayFrame("Controls");
 
     frame->setContent(new tsl::elm::CustomDrawer([](tsl::gfx::Renderer *renderer, u16 x, u16 y, u16 w, u16 h) {
         u32 yOffset, i;

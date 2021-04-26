@@ -2,7 +2,7 @@
 
 #include <filesystem>
 
-#include <CustomFooterOverlayFrame.hpp>
+#include <StandardOverlayFrame.hpp>
 #include <FileSelectEntry.hpp>
 #include <Config.hpp>
 #include <Utils.hpp>
@@ -46,7 +46,7 @@ FileSelect::~FileSelect() {
 }
 
 tsl::elm::Element* FileSelect::createUI() {
-    auto frame = new CustomFooterOverlayFrame("Select File...", m_path, "\uE0E3  Favorite");
+    auto frame = new StandardOverlayFrame("Select File...", m_path, "\uE0E3  Favorite");
 
     auto list = new tsl::elm::List();
 

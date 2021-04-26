@@ -5,9 +5,10 @@
 #include <FavoritesMenu.hpp>
 #include <HelpMenu.hpp>
 #include <LogMenu.hpp>
+#include <StandardOverlayFrame.hpp>
 
 tsl::elm::Element* MainMenu::createUI() {
-    auto frame = new tsl::elm::OverlayFrame("Text Reader", TEXT_READER_VERSION);
+    auto frame = new StandardOverlayFrame("Text Reader", TEXT_READER_VERSION);
     m_menuItems = new tsl::elm::List();
 
     auto favorites = new tsl::elm::ListItem("Favorites");

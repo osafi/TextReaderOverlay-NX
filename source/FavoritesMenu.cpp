@@ -1,6 +1,6 @@
 #include <FavoritesMenu.hpp>
 
-#include <CustomFooterOverlayFrame.hpp>
+#include <StandardOverlayFrame.hpp>
 #include <FileSelectEntry.hpp>
 #include <Config.hpp>
 #include <Utils.hpp>
@@ -29,7 +29,7 @@ FavoritesMenu::~FavoritesMenu() {
 }
 
 tsl::elm::Element* FavoritesMenu::createUI() {
-    auto frame = new CustomFooterOverlayFrame("Favorites", " ", "\uE0E3  Favorite");
+    auto frame = new StandardOverlayFrame("Favorites", " ", "\uE0E3  Favorite");
 
     if (m_entries.empty()) {
         frame->setContent(new tsl::elm::CustomDrawer([this](tsl::gfx::Renderer *renderer, u16 x, u16 y, u16 w, u16 h) {
