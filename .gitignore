@@ -10,3 +10,5 @@ build/
 *.nro
 
 TextReaderOverlay-*.zip
+.idea/
+cmake-build-debug/
