@@ -53,8 +53,9 @@ TextReader::TextReader(std::string const &path)
       m_chunkMid(0),
       m_loading(false),
       m_loaded(false),
+      m_width(448),
       m_font("sdmc:/switch/.overlays/TextReaderOverlay/fonts/RobotoMono/RobotoMono-Regular.ttf"),
-      m_size(26),
+      m_size(10),
       m_panx(0),
       m_debug(false)
 {
@@ -76,7 +77,8 @@ TextReader::~TextReader() {
 
 tsl::elm::Element* TextReader::createUI() {
     auto drawer = new tsl::elm::CustomDrawer([this](tsl::gfx::Renderer *renderer, u16 x, u16 y, u16 w, u16 h) {
-        renderer->fillScreen(a({ 0x0, 0x0, 0x0, 0xD }));
+        renderer->clearScreen();
+        renderer->drawRect(x, y, w, h, a({ 0x0, 0x0, 0x0, 0xD }));
 
         if (!m_loading) {
             renderer->drawString("Loading... May take a few seconds", false, 20, 50, 16, a(0xFFFF));
@@ -118,7 +120,7 @@ tsl::elm::Element* TextReader::createUI() {
 
             if (chunk < m_chunks.size()) {
                 if (m_bookmarks.find(m_lineNum + i) != m_bookmarks.end()) {
-                    renderer->drawRect(0, i * m_size, tsl::cfg::FramebufferWidth, 1, a({ 0x6, 0x1, 0x1, 0xF }));
+                    renderer->drawRect(0, i * m_size, w, 1, a({ 0x6, 0x1, 0x1, 0xF }));
                 }
                 printLn(
                     m_chunks[chunk].getLine(line),
@@ -133,10 +135,11 @@ tsl::elm::Element* TextReader::createUI() {
         renderer->drawRect(0, progressY, 1, 20, a({ 0x8, 0x8, 0x8, 0xF }));
 
         if (m_debug)
-            renderer->drawString(std::to_string(m_fps).c_str(), false, tsl::cfg::FramebufferWidth - 20, 10, 10, a(0xFFFF));
+            renderer->drawString(std::to_string(m_fps).c_str(), false, w - 20, 10, 10, a(0xFFFF));
     });
 
-    drawer->setBoundaries(0, 0, tsl::cfg::FramebufferWidth, tsl::cfg::FramebufferHeight);
+    drawer->setBoundaries(0, 0, m_width, tsl::cfg::FramebufferHeight);
+    this->drawer = drawer;
 
     return drawer;
 }
@@ -194,6 +197,17 @@ bool TextReader::handleInput(u64 keysDown, u64 keysHeld, const HidTouchState &to
         m_size++;
     if (keysDown & KEY_DDOWN)
         m_size--;
+
+    if (keysDown & KEY_PLUS) {
+        if (m_width == 448) {
+            m_width = 1280;
+            m_size = 26;
+        } else {
+            m_width = 448;
+            m_size = 10;
+        }
+        drawer->setBoundaries(0, 0, m_width, tsl::cfg::FramebufferHeight);
+    }
 
     if (keysDown & KEY_X)
         tsl::Overlay::get()->hide();

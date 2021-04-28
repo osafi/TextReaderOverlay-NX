@@ -74,6 +74,9 @@ private:
     bool m_loading;
     bool m_loaded;
 
+    s32 m_width;
+    tsl::elm::Element* drawer = nullptr;
+
     Font m_font;
     u32 m_size;
     s32 m_panx;

@@ -10,7 +10,7 @@ void StandardOverlayFrame::draw(tsl::gfx::Renderer *renderer) {
 
     renderer->drawRect(15, FRAME_HEIGHT - 73, FRAME_WIDTH - 30, 1, a(tsl::style::color::ColorText));
 
-    renderer->drawString(this->m_footer.c_str(), false, 30, 693, 23, a(tsl::style::color::ColorText));
+    renderer->drawString(this->m_footer.c_str(), false, 30, FRAME_HEIGHT - 27, 23, a(tsl::style::color::ColorText));
 
     if (this->m_contentElement != nullptr)
         this->m_contentElement->frame(renderer);
