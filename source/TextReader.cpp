@@ -64,6 +64,14 @@ TextReader::TextReader(std::string const &path)
     if (resume != j["files"][m_path].end()) {
         m_lineNum = *resume;
     }
+    auto width = j["files"][m_path].find("width");
+    if (width != j["files"][m_path].end()) {
+        m_width = *width;
+    }
+    auto size = j["files"][m_path].find("size");
+    if (size != j["files"][m_path].end()) {
+        m_size = *size;
+    }
     auto bookmarks = j["files"][m_path].find("bookmarks");
     if (bookmarks != j["files"][m_path].end()) {
         for (auto &b : *bookmarks) {
@@ -316,6 +324,8 @@ void TextReader::nextBookmark() {
 void TextReader::close() const {
     Config::update([this](json &j) {
         j["files"][m_path]["resume"] = m_lineNum;
+        j["files"][m_path]["width"] = m_width;
+        j["files"][m_path]["size"] = m_size;
     });
     tsl::goBack();
 }
