@@ -11,7 +11,7 @@
 
 class TextReaderChunk {
 public:
-    static const size_t MAX_SIZE = 250;
+    static const size_t MAX_SIZE = 150;
 
     TextReaderChunk(long int fileOffset)
         : m_fileOffset(fileOffset),

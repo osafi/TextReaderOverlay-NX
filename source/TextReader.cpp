@@ -84,7 +84,7 @@ TextReader::~TextReader() {
 }
 
 tsl::elm::Element* TextReader::createUI() {
-    auto drawer = new tsl::elm::CustomDrawer([this](tsl::gfx::Renderer *renderer, u16 x, u16 y, u16 w, u16 h) {
+    this->drawer = new tsl::elm::CustomDrawer([this](tsl::gfx::Renderer *renderer, u16 x, u16 y, u16 w, u16 h) {
         renderer->clearScreen();
         renderer->drawRect(x, y, w, h, a({ 0x0, 0x0, 0x0, 0xD }));
 
@@ -121,7 +121,7 @@ tsl::elm::Element* TextReader::createUI() {
             return;
         }
 
-        const size_t numLinesToShow = 100;
+        const size_t numLinesToShow = (h / m_size) + 20;
         for (u32 i = 0; i < numLinesToShow; ++i) {
             u32 chunk = (m_lineNum + i) / TextReaderChunk::MAX_SIZE;
             u32 line = (m_lineNum + i) % TextReaderChunk::MAX_SIZE;
@@ -139,15 +139,14 @@ tsl::elm::Element* TextReader::createUI() {
             }
         }
 
-        u32 progressY = m_lineNum * (tsl::cfg::FramebufferHeight - 20) / m_totalLines;
+        u32 progressY = m_lineNum * (h - 20) / m_totalLines;
         renderer->drawRect(0, progressY, 1, 20, a({ 0x8, 0x8, 0x8, 0xF }));
 
         if (m_debug)
             renderer->drawString(std::to_string(m_fps).c_str(), false, w - 20, 10, 10, a(0xFFFF));
     });
 
-    drawer->setBoundaries(0, 0, m_width, tsl::cfg::FramebufferHeight);
-    this->drawer = drawer;
+    this->drawer->setBoundaries(0, 0, m_width, tsl::cfg::FramebufferHeight);
 
     return drawer;
 }
