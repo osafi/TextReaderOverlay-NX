@@ -23,8 +23,8 @@ FavoritesMenu::FavoritesMenu() {
 }
 
 FavoritesMenu::~FavoritesMenu() {
-    for (auto it = m_entries.begin(); it != m_entries.end(); ++it) {
-        delete *it;
+    for (auto & m_entry : m_entries) {
+        delete m_entry;
     }
 }
 
@@ -32,7 +32,7 @@ tsl::elm::Element* FavoritesMenu::createUI() {
     auto frame = new StandardOverlayFrame("Favorites", " ", "\uE0E3  Favorite");
 
     if (m_entries.empty()) {
-        frame->setContent(new tsl::elm::CustomDrawer([this](tsl::gfx::Renderer *renderer, u16 x, u16 y, u16 w, u16 h) {
+        frame->setContent(new tsl::elm::CustomDrawer([](tsl::gfx::Renderer *renderer, u16 x, u16 y, u16 w, u16 h) {
             renderer->drawString("No favorites added yet", false, 20, 100, 16, a(0xFFFF));
         }));
         return frame;
@@ -40,16 +40,16 @@ tsl::elm::Element* FavoritesMenu::createUI() {
 
     auto list = new tsl::elm::List();
 
-    for (auto it = m_entries.begin(); it != m_entries.end(); ++it) {
-        auto item = new tsl::elm::ListItem((*it)->label());
-        item->setClickListener([it, item](s64 keys) {
-            if (keys & KEY_A) {
-                (*it)->select();
+    for (auto & m_entry : m_entries) {
+        auto item = new tsl::elm::ListItem(m_entry->label());
+        item->setClickListener([&m_entry, item](s64 keys) {
+            if (keys & HidNpadButton_A) {
+                m_entry->select();
                 return true;
             }
-            if (keys & KEY_Y) {
-                (*it)->toggleFavorite();
-                item->setText((*it)->label());
+            if (keys & HidNpadButton_Y) {
+                m_entry->toggleFavorite();
+                item->setText(m_entry->label());
                 return true;
             }
             return false;

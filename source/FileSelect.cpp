@@ -40,8 +40,8 @@ FileSelect::FileSelect(std::string const &path)
 }
 
 FileSelect::~FileSelect() {
-    for (auto it = m_entries.begin(); it != m_entries.end(); ++it) {
-        delete *it;
+    for (auto & m_entry : m_entries) {
+        delete m_entry;
     }
 }
 
@@ -50,16 +50,16 @@ tsl::elm::Element* FileSelect::createUI() {
 
     auto list = new tsl::elm::List();
 
-    for (auto it = m_entries.begin(); it != m_entries.end(); ++it) {
-        auto item = new tsl::elm::ListItem((*it)->label());
-        item->setClickListener([it, item](u64 keys) {
-            if (keys & KEY_A) {
-                (*it)->select();
+    for (auto & m_entry : m_entries) {
+        auto item = new tsl::elm::ListItem(m_entry->label());
+        item->setClickListener([&m_entry, item](u64 keys) {
+            if (keys & HidNpadButton_A) {
+                m_entry->select();
                 return true;
             }
-            else if (keys & KEY_Y) {
-                (*it)->toggleFavorite();
-                item->setText((*it)->label());
+            else if (keys & HidNpadButton_Y) {
+                m_entry->toggleFavorite();
+                item->setText(m_entry->label());
                 return true;
             }
             return false;

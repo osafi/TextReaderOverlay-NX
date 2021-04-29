@@ -158,54 +158,54 @@ void TextReader::printLn(std::string const &text, s32 x, s32 y, u32 fontSize, ts
 }
 
 bool TextReader::handleInput(u64 keysDown, u64 keysHeld, const HidTouchState &touchInput, HidAnalogStickState leftJoyStick, HidAnalogStickState rightJoyStick) {
-    if (keysHeld & KEY_ZR) {
-        if (keysHeld & KEY_LSTICK_UP)
+    if (keysHeld & HidNpadButton_ZR) {
+        if (keysHeld & HidNpadButton_StickLUp)
             scrollTo(0);
-        if (keysHeld & KEY_LSTICK_DOWN)
+        if (keysHeld & HidNpadButton_StickLDown)
             scroll(m_totalLines);
-        if (keysHeld & KEY_LSTICK_LEFT)
+        if (keysHeld & HidNpadButton_StickLLeft)
             scroll(-1000);
-        if (keysHeld & KEY_LSTICK_RIGHT)
+        if (keysHeld & HidNpadButton_StickLRight)
             scroll(1000);
     }
-    else if (keysHeld & KEY_ZL) {
-        if (keysHeld & KEY_LSTICK_UP)
+    else if (keysHeld & HidNpadButton_ZL) {
+        if (keysHeld & HidNpadButton_StickLUp)
             scroll(-20);
-        if (keysHeld & KEY_LSTICK_DOWN)
+        if (keysHeld & HidNpadButton_StickLDown)
             scroll(20);
-        if (keysHeld & KEY_LSTICK_LEFT)
+        if (keysHeld & HidNpadButton_StickLLeft)
             scroll(-200);
-        if (keysHeld & KEY_LSTICK_RIGHT)
+        if (keysHeld & HidNpadButton_StickLRight)
             scroll(200);
     }
     else {
-        if (keysHeld & KEY_LSTICK_UP)
+        if (keysHeld & HidNpadButton_StickLUp)
             scroll(-2);
-        if (keysHeld & KEY_LSTICK_DOWN)
+        if (keysHeld & HidNpadButton_StickLDown)
             scroll(2);
-        if (keysHeld & KEY_LSTICK_LEFT)
+        if (keysHeld & HidNpadButton_StickLLeft)
             scroll(-1);
-        if (keysHeld & KEY_LSTICK_RIGHT)
+        if (keysHeld & HidNpadButton_StickLRight)
             scroll(1);
     }
 
-    if (keysHeld & KEY_RSTICK_UP)
+    if (keysHeld & HidNpadButton_StickRUp)
         scroll(-1);
-    if (keysHeld & KEY_RSTICK_DOWN)
+    if (keysHeld & HidNpadButton_StickRDown)
         scroll(1);
-    if (keysHeld & KEY_RSTICK_LEFT)
+    if (keysHeld & HidNpadButton_StickRLeft)
         m_panx++;
-    if (keysHeld & KEY_RSTICK_RIGHT)
+    if (keysHeld & HidNpadButton_StickRRight)
         m_panx--;
-    if (keysDown & KEY_RSTICK)
+    if (keysDown & HidNpadButton_StickR)
         m_panx = 0;
 
-    if (keysDown & KEY_DUP)
+    if (keysDown & HidNpadButton_Up)
         m_size++;
-    if (keysDown & KEY_DDOWN)
+    if (keysDown & HidNpadButton_Down)
         m_size--;
 
-    if (keysDown & KEY_PLUS) {
+    if (keysDown & HidNpadButton_Plus) {
         if (m_width == 448) {
             m_width = 1280;
             m_size = 26;
@@ -216,20 +216,20 @@ bool TextReader::handleInput(u64 keysDown, u64 keysHeld, const HidTouchState &to
         drawer->setBoundaries(0, 0, m_width, tsl::cfg::FramebufferHeight);
     }
 
-    if (keysDown & KEY_X)
+    if (keysDown & HidNpadButton_X)
         tsl::Overlay::get()->hide();
 
-    if (keysDown & KEY_Y)
+    if (keysDown & HidNpadButton_Y)
         toggleBookmark();
-    if (keysDown & KEY_L)
+    if (keysDown & HidNpadButton_L)
         previousBookmark();
-    if (keysDown & KEY_R)
+    if (keysDown & HidNpadButton_R)
         nextBookmark();
 
-    if (keysDown & KEY_B)
+    if (keysDown & HidNpadButton_B)
         close();
 
-    if (keysDown & KEY_MINUS)
+    if (keysDown & HidNpadButton_Minus)
         m_debug = !m_debug;
 
     return true;
