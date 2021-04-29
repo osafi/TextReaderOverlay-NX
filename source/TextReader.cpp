@@ -55,7 +55,7 @@ TextReader::TextReader(std::string const &path)
       m_loaded(false),
       m_width(448),
       m_font("sdmc:/switch/.overlays/TextReaderOverlay/fonts/RobotoMono/RobotoMono-Regular.ttf"),
-      m_size(10),
+      m_size(8),
       m_panx(0),
       m_debug(false)
 {
@@ -206,14 +206,7 @@ bool TextReader::handleInput(u64 keysDown, u64 keysHeld, const HidTouchState &to
         m_size--;
 
     if (keysDown & HidNpadButton_Plus) {
-        if (m_width == 448) {
-            m_width = 1280;
-            m_size = 26;
-        } else {
-            m_width = 448;
-            m_size = 10;
-        }
-        drawer->setBoundaries(0, 0, m_width, tsl::cfg::FramebufferHeight);
+        nextSize();
     }
 
     if (keysDown & HidNpadButton_X)
@@ -233,6 +226,24 @@ bool TextReader::handleInput(u64 keysDown, u64 keysHeld, const HidTouchState &to
         m_debug = !m_debug;
 
     return true;
+}
+
+void TextReader::nextSize() {
+    switch (m_width) {
+        case 448:
+            m_width = 640;
+            m_size = 14;
+            break;
+        case 640:
+            m_width = 1280;
+            m_size = 26;
+            break;
+        default:
+            m_width = 448;
+            m_size = 8;
+    }
+
+    drawer->setBoundaries(0, 0, m_width, tsl::cfg::FramebufferHeight);
 }
 
 void TextReader::scrollTo(u32 line) {
