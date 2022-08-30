@@ -2,10 +2,10 @@
 cmake_minimum_required(VERSION 3.10)
 project(TextReaderOverlay)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 include_directories($ENV{DEVKITPRO}/devkitA64/aarch64-none-elf/include)
-include_directories($ENV{DEVKITPRO}/devkitA64/lib/gcc/aarch64-none-elf/10.2.0/include)
+include_directories($ENV{DEVKITPRO}/devkitA64/lib/gcc/aarch64-none-elf/12.1.0/include)
 include_directories($ENV{DEVKITPRO}/portlibs/switch/include)
 include_directories($ENV{DEVKITPRO}/portlibs/switch/include/freetype2)
 include_directories($ENV{DEVKITPRO}/libnx/lib)
