@@ -221,3 +221,15 @@ $(RELEASE_ZIP): $(OUTPUT).ovl
 	cp -r package/* sdfiles/switch/.overlays/TextReaderOverlay/
 	cd sdfiles/ && zip -r ../$(RELEASE_ZIP) * && cd ..
 	rm -rf sdfiles/
+
+
+IP := 10.0.0.205
+PORT := 5000
+
+.PHONY: install
+
+install: $(BUILD) $(RELEASE_ZIP)
+	rm -rf sdfiles
+	unzip -d sdfiles $(RELEASE_ZIP)
+	lftp -e "mirror -R sdfiles /; bye" -u switch, $(IP) -p $(PORT)
+	rm -rf sdfiles

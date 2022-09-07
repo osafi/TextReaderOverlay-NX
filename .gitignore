@@ -1,14 +1,10 @@
-
 build/
-
 *.ovl
-
 *.elf
-
 *.nacp
-
 *.nro
-
+*.lst
 TextReaderOverlay-*.zip
 .idea/
 cmake-build-debug/
+sdfiles/*
