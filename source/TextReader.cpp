@@ -9,7 +9,7 @@
 
 std::string TextReaderChunk::EMPTY_STRING = "";
 
-void TextReaderChunk::loadText(FILE *file) {
+void TextReaderChunk::loadText(FILE *file, u32 maxChunkSize) {
     if (m_lines != nullptr) {
         return;
     }
@@ -17,11 +17,11 @@ void TextReaderChunk::loadText(FILE *file) {
         Log::log("Failed to load chunk");
     }
     else {
-        m_lines = new std::vector<std::string>(MAX_SIZE, std::string());
+        m_lines = new std::vector<std::string>(maxChunkSize, std::string());
         char buf[256];
         u32 line = 0;
         u32 eol_idx;
-        while (line < MAX_SIZE && (fgets(buf, sizeof(buf), file) != nullptr)) {
+        while (line < maxChunkSize && (fgets(buf, sizeof(buf), file) != nullptr)) {
             eol_idx = strcspn(buf, "\r\n");
             buf[eol_idx] = 0;
             m_lines->at(line).append(buf);
@@ -50,6 +50,7 @@ TextReader::TextReader(std::string const &path)
     : m_path(path),
       m_totalLines(0),
       m_lineNum(0),
+      m_chunkSize(150),
       m_chunkMid(0),
       m_loading(false),
       m_loaded(false),
@@ -78,6 +79,10 @@ TextReader::TextReader(std::string const &path)
             m_bookmarks.insert((u32)b);
         }
     }
+    auto chunkSize = j["settings"].find("chunkSize");
+    if (chunkSize != j["settings"].end()) {
+        m_chunkSize = *chunkSize;
+    }
 }
 TextReader::~TextReader() {
     if (m_file) fclose(m_file);
@@ -103,7 +108,7 @@ tsl::elm::Element* TextReader::createUI() {
                 while ((c = fgetc(m_file)) != EOF) {
                     if (c == '\n') {
                         ++line;
-                        if (line % TextReaderChunk::MAX_SIZE == 0)
+                        if (line % m_chunkSize == 0)
                             m_chunks.push_back(TextReaderChunk(ftell(m_file)));
                     }
                 }
@@ -123,8 +128,8 @@ tsl::elm::Element* TextReader::createUI() {
 
         const size_t numLinesToShow = (h / m_size) + 20;
         for (u32 i = 0; i < numLinesToShow; ++i) {
-            u32 chunk = (m_lineNum + i) / TextReaderChunk::MAX_SIZE;
-            u32 line = (m_lineNum + i) % TextReaderChunk::MAX_SIZE;
+            u32 chunk = (m_lineNum + i) / m_chunkSize;
+            u32 line = (m_lineNum + i) % m_chunkSize;
 
             if (chunk < m_chunks.size()) {
                 if (m_bookmarks.find(m_lineNum + i) != m_bookmarks.end()) {
@@ -142,8 +147,10 @@ tsl::elm::Element* TextReader::createUI() {
         u32 progressY = m_lineNum * (h - 20) / m_totalLines;
         renderer->drawRect(0, progressY, 1, 20, a({ 0x8, 0x8, 0x8, 0xF }));
 
-        if (m_debug)
+        if (m_debug) {
             renderer->drawString(std::to_string(m_fps).c_str(), false, w - 20, 10, 10, a(0xFFFF));
+            renderer->drawString(std::to_string(m_chunkSize).c_str(), false, w - 50, 10, 10, a(0xFFFF));
+        }
     });
 
     this->drawer->setBoundaries(0, 0, m_width, tsl::cfg::FramebufferHeight);
@@ -252,12 +259,12 @@ void TextReader::scrollTo(u32 line) {
 
 void TextReader::scroll(s32 offset) {
     u32 newLineNum = std::clamp((s32)m_lineNum + offset, 0, (s32)m_totalLines);
-    u32 newChunk = newLineNum / TextReaderChunk::MAX_SIZE;
-    u32 newOffset = newLineNum % TextReaderChunk::MAX_SIZE;
+    u32 newChunk = newLineNum / m_chunkSize;
+    u32 newOffset = newLineNum % m_chunkSize;
 
     // upwards
     if (newChunk < m_chunkMid &&
-        (newChunk < m_chunkMid - 1 || newOffset < TextReaderChunk::MAX_SIZE / 2))
+        (newChunk < m_chunkMid - 1 || newOffset < m_chunkSize / 2))
     {
         for (u32 chunk = m_chunkMid + 1; chunk > newChunk + 1; --chunk) {
             unloadText(chunk);
@@ -266,7 +273,7 @@ void TextReader::scroll(s32 offset) {
     }
     // downwards
     else if (newChunk > m_chunkMid &&
-             (newChunk > m_chunkMid + 1 || newOffset > TextReaderChunk::MAX_SIZE / 2))
+             (newChunk > m_chunkMid + 1 || newOffset > m_chunkSize / 2))
     {
         for (u32 chunk = std::max(0, (s32)m_chunkMid - 1); chunk < newChunk - 1; ++chunk) {
             unloadText(chunk);
@@ -285,7 +292,7 @@ void TextReader::scroll(s32 offset) {
 
 void TextReader::loadText(u32 chunk) {
     if (chunk < m_chunks.size()) {
-        m_chunks[chunk].loadText(m_file);
+        m_chunks[chunk].loadText(m_file, m_chunkSize);
     }
 }
 

@@ -4,6 +4,7 @@
 #include <FileSelect.hpp>
 #include <FavoritesMenu.hpp>
 #include <HelpMenu.hpp>
+#include <SettingsMenu.hpp>
 #include <LogMenu.hpp>
 #include <StandardOverlayFrame.hpp>
 
@@ -48,6 +49,16 @@ tsl::elm::Element* MainMenu::createUI() {
 
 bool MainMenu::handleInput(u64 keysDown, u64 keysHeld, const HidTouchState &touchInput, HidAnalogStickState leftJoyStick, HidAnalogStickState rightJoyStick) {
     if (!m_debug && (keysDown & HidNpadButton_Minus)) {
+        auto settings = new tsl::elm::ListItem("Settings");
+        settings->setClickListener([](s64 keys) {
+            if (keys & HidNpadButton_A) {
+                tsl::changeTo<SettingsMenu>();
+                return true;
+            }
+            return false;
+        });
+        m_menuItems->addItem(settings);
+
         auto logMenu = new tsl::elm::ListItem("Show Logs");
         logMenu->setClickListener([](s64 keys) {
             if (keys & HidNpadButton_A) {

@@ -11,15 +11,13 @@
 
 class TextReaderChunk {
 public:
-    static const size_t MAX_SIZE = 150;
-
     TextReaderChunk(long int fileOffset)
         : m_fileOffset(fileOffset),
           m_lines(nullptr)
     {}
     ~TextReaderChunk() { unloadText(); }
 
-    void loadText(FILE *file);
+    void loadText(FILE *file, u32 maxChunkSize);
     void unloadText();
     std::string& getLine(u32 lineOffset) const;
 
@@ -69,6 +67,7 @@ private:
     FILE *m_file;
     u32 m_totalLines;
     u32 m_lineNum;
+    u32 m_chunkSize;
     u32 m_chunkMid;
     std::vector<TextReaderChunk> m_chunks;
 
