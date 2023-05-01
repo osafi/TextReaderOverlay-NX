@@ -4,28 +4,23 @@ on:
   push:
     branches:
       - master
-  workflow_dispatch: # Enables the manual 'Run Workflow' button in GitHub UI
 
 jobs:
-  build:
+  switch:
+    name: Switch
     runs-on: ubuntu-latest
-    container:
-      image: devkitpro/devkita64
+
     steps:
-      - uses: actions/checkout@v3
-        name: Checkout
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
-          submodules: 'true'
+          submodules: recursive
 
       - name: Build
-        run: make
-
-      # - name: Upload packages to release
-      #   uses: ncipollo/release-action@v1.8.10
-      #   with:
-      #     allowUpdates: true
-      #     artifactErrorsFailBuild: true
-      #     artifacts: ./bin/*.+(db|files|gz|zst)
-      #     tag: repository
-      #     commit: master
-      #     token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          docker run -e ENABLE_COMPATIBILITY_REPORTING -v $GITHUB_WORKSPACE:/build_dir devkitpro/devkita64 /bin/bash -ex /build_dir/.github/workflows/buildSwitch.sh
+      - uses: actions/upload-artifact@v3
+        with:
+          name: TextReaderOverlay-NX
+          path: |
+            *.ovl
